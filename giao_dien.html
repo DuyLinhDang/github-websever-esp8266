@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>D.a</title>
+</head>
+<style>
+    body {
+        text-align: center;
+        font-size: 130%;
+        background-color: rgb(245, 245, 228);
+    }
+    
+    button {
+        padding: 10px 10px;
+        margin-top: 20px;
+        margin-bottom: 10px;
+        margin-right: 10px;
+        font-size: 85%;
+    }
+    
+    input {
+        width: 250px;
+        height: 25px;
+        font-size: 18px;
+        margin: 7px 7px;
+        background-color: rgb(245, 245, 242);
+    }
+    
+    .all {
+        width: 1440px;
+        margin: auto;
+        padding-top: 50px;
+    }
+    
+    .dang-nhap-wifi {
+        width: 50%;
+        float: left;
+    }
+    
+    .mqtt {
+        width: 50%;
+        float: left;
+    }
+    
+    h1 {
+        color: brown;
+    }
+    
+    h2 {
+        margin-top: -20px;
+        font-size: 15px;
+    }
+    
+    .button-connect,
+    .button-save {
+        background-color: rgb(79, 243, 142);
+    }
+    
+    .button-clear-eeprom,
+    .button-clear-mqtt {
+        background-color: rgb(194, 21, 21);
+    }
+    
+    .button-restart {
+        background-color: rgb(112, 59, 209);
+    }
+</style>
+
+<body>
+    <div class="all">
+        <div class="dang-nhap-wifi">
+            <h1>Đăng nhập WIFI</h1>
+            <div>Tên Wifi</div>
+            <div><input type="text" id="ssid"></div>
+            <div>Mật khẩu</div>
+            <div><input type="text" id="pass"></div>
+            <div>
+                <button class="button-connect" onclick="writeEEPROM()">Connect WIFI</button>
+                <button class="button-clear-eeprom" onclick="clearEEPROM()">Clear WIFI</button>
+                <button class="button-restart" onclick="restart_esp()">Restart ESP</button>
+            </div>
+            <div id="reponsetext"></div>
+        </div>
+        <div class="mqtt">
+            <h1>Đăng nhập MQTT</h1>
+            <h2>(Nếu chưa có tài khoản có thể bỏ trống)</h2>
+            <div>Host</div>
+            <div><input type="text" id="host"></div>
+            <div>MQTT Port</div>
+            <div><input type="text" id="port"></div>
+            <div>Username</div>
+            <div><input type="text" id="username"></div>
+            <div>Password</div>
+            <div><input type="text" id="password"></div>
+            <div>
+                <button class="button-save" onclick="savemqtt()">Save MQTT</button>
+                <button class="button-clear-mqtt" onclick="clearmqtt()">Clear MQTT</button>
+            </div>
+        </div>
+        <div id="reponsetext"></div>
+    </div>
+    <!-- .................................JavaScript...............................  -->
+    <script>
+        // tạo đối tương object
+        var xhttp = new XMLHttpRequest();
+
+        function writeEEPROM() {
+            var ssid = document.getElementById("ssid").value;
+            var pass = document.getElementById("pass").value;
+            xhttp.open("GET", "/writeEEPROM?ssid=" + ssid + "&pass=" + pass, true);
+            xhttp.onreadystatechange = process; //nhận reponse 
+            xhttp.send();
+        }
+
+        function clearEEPROM() {
+            xhttp.open("GET", "/clearEEPROM", true);
+            xhttp.onreadystatechange = process; //nhận reponse 
+            xhttp.send();
+        }
+
+        function savemqtt() {
+            var host = document.getElementById("ssid").value;
+            var port = document.getElementById("pass").value;
+            var username = document.getElementById("ssid").value;
+            var password = document.getElementById("pass").value;
+            xhttp.open("GET", "/writeEEPROM?ssid=" + ssid + "&pass=" + pass, true);
+            xhttp.onreadystatechange = process; //nhận reponse 
+            xhttp.send();
+        }
+
+        function process() {
+            if (xhttp.readyState == 4 && xhttp.status == 200) {
+                //------Updat data sử dụng javascript----------
+                ketqua = xhttp.responseText;
+                document.getElementById("reponsetext").innerHTML = ketqua;
+            }
+        }
+    </script>
+</body>
+
+</html>
